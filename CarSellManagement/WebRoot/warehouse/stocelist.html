@@ -1,0 +1,198 @@
+﻿<%@page import="com.groupfour.daos.*,com.groupfour.models.*,java.util.*"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<link type="text/css" rel="stylesheet" href="../css/public.css">
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_jumpMenu(targ,selObj,restore){ //v3.0
+  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+  if (restore) selObj.selectedIndex=0;
+}
+//-->
+</script>
+<style type="text/css">
+<!--
+.style2 {
+	font-size: 12px
+}
+-->
+</style>
+</head>
+<body>
+<table border="0" width="100%" cellspacing="0">
+	<tr>
+		<td background="../images/topBarBg.gif" height="23">仓库管理</td>
+	</tr>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"
+	bordercolor="#6490C2">
+	<tr>
+		<td width="25" height="24" background="../images/tab/firstLeftSel.gif">&nbsp;</td>
+		<td width="100" background="../images/tab/middleSel.gif">
+		<div align="center">仓库信息查看</div>
+		</td>
+		<td width="50" background="../images/tab/lastRightSel.gif">&nbsp;</td>
+		<td background="../images/tab/bg.gif">&nbsp;</td>
+	</tr>
+</table>
+<form name="form1" method="post" action="../warehouse?action=searchresponsity">
+  <label></label>
+　　　　　仓库名：
+<select name="car_location">
+  <%
+      ResponsityDao responsitydao = new ResponsityDao();
+      List list = responsitydao.getAllResponsity();
+      ResponsityModel responsitymodel;
+      for(int i=0;i<list.size();i++){
+      	responsitymodel = (ResponsityModel)list.get(i);
+      	%>
+      	<option><%= responsitymodel.getResponsity_name()%></option>
+      	<%}%>
+</select> 　　
+汽车名称：
+<label>
+<select name="car_name">
+  <%
+  list = responsitydao.getCarName();
+  String carname = null;
+  for(int i=0;i<list.size();i++){
+  	carname = (String)list.get(i);%>
+  		<option><%= carname%></option>
+  	<%
+  }
+  %>
+</select>
+</label> 　 
+汽车型号：
+<label>
+<input type="text" name="car_type">
+</label>　　
+<label>
+<input type="submit" name="Submit" value="查询">
+</label>
+<p>&nbsp;</p>
+</form>
+<form name="editdemo" action="addResume.do" method="post">
+<table class="maintable" width="100%" border="0" cellspacing="0">
+<%
+if(session.getAttribute("responsity")==null){
+List list1;
+list1 = responsitydao.getResponsityCar();
+CarModel carmodel;
+for(int i=0;i<list1.size();i++){
+	responsitymodel = (ResponsityModel)list1.get(i);
+%>
+<tr>
+		<td width="12%" height="27">
+	  <div align="center">仓　　库：</div>		</td>
+		<td width="13%"><div align="center"><%= responsitymodel.getResponsity_name()%></div></td>
+		<td width="14%">&nbsp;</td>
+		<td width="14%">&nbsp;</td>
+		<td width="20%">
+		  <div align="center">仓库存储量：</div></td>
+		<td width="27%"><div align="center"><%= responsitymodel.getResponsity_max_number()%></div></td>
+	</tr>
+	<tr>
+		<td colspan="6">
+		<hr color="#99CCFF">		</td>
+	</tr>
+	<tr>
+		<td height="23">
+	  <div align="center">仓库地址：</div>		</td>
+		<td colspan="5"><div align="center"><%= responsitymodel.getResponsity_location()%></div></td>
+	</tr>
+	<%
+	for(int j=0;j<responsitymodel.getListCar().size();j++){
+		carmodel = responsitymodel.getListCar().get(j);%>
+	<tr>
+		<td colspan="6">
+		<hr color="#99CCFF">		</td>
+	</tr>
+	<tr>
+      <td><div align="center">汽车名称：</div></td>
+	  <td><div align="center"><%= carmodel.getCar_name()%></div></td>
+	  <td><div align="center">型号：</div></td>
+	  <td><div align="center"><%= carmodel.getCar_type()%></div></td>
+	  <td><div align="center">数　　量：</div></td>
+	  <td><div align="center"><%= carmodel.getCar_count()%></div></td>
+    </tr>
+    
+	<%
+	}
+	%>
+	<tr align="center" bgcolor="#FFFFFF">
+		<td height="19" colspan="6" class="titleLine" bgcolor="#99CCFF">
+		<div align="left">
+		  <p>&nbsp;</p>
+		  <p>&nbsp;</p>
+		</div>		</td>
+	</tr>
+<%
+}}else{
+responsitymodel = (ResponsityModel)session.getAttribute("responsity");
+CarModel carmodel;
+%>
+<tr>
+		<td width="12%" height="27">
+	  <div align="center">仓　　库：</div>		</td>
+		<td width="13%"><div align="center"><%= responsitymodel.getResponsity_name()%></div></td>
+		<td width="14%">&nbsp;</td>
+		<td width="14%">&nbsp;</td>
+		<td width="20%">
+		  <div align="center">仓库存储量：</div></td>
+		<td width="27%"><div align="center"><%= responsitymodel.getResponsity_max_number()%></div></td>
+	</tr>
+	<tr>
+		<td colspan="6">
+		<hr color="#99CCFF">		</td>
+	</tr>
+	<tr>
+		<td height="23">
+	  <div align="center">仓库地址：</div>		</td>
+		<td colspan="5"><div align="center"><%= responsitymodel.getResponsity_location()%></div></td>
+	</tr>
+	<%
+	for(int j=0;j<responsitymodel.getListCar().size();j++){
+		carmodel = responsitymodel.getListCar().get(j);%>
+	<tr>
+		<td colspan="6">
+		<hr color="#99CCFF">		</td>
+	</tr>
+	<tr>
+      <td><div align="center">汽车名称：</div></td>
+	  <td><div align="center"><%= carmodel.getCar_name()%></div></td>
+	  <td><div align="center">型号：</div></td>
+	  <td><div align="center"><%= carmodel.getCar_type()%></div></td>
+	  <td><div align="center">数　　量：</div></td>
+	  <td><div align="center"><%= carmodel.getCar_count()%></div></td>
+    </tr>
+    
+	<%
+	}
+	%>
+	<tr align="center" bgcolor="#FFFFFF">
+		<td height="19" colspan="6" class="titleLine" bgcolor="#99CCFF">
+		<div align="left">
+		  <p>&nbsp;</p>
+		  <p>&nbsp;</p>
+		</div>		</td>
+	</tr>
+<%
+}
+%>
+</table>
+<table align="center" width="100%">
+	<tr>
+		<td height="30">
+		  <div align="center"></div></td>
+	</tr>
+	<tr>
+		<td height="30" background="images/tab/bg.gif"></td>
+	</tr>
+</table>
+</form>
+</body>
+</html>
